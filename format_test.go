@@ -1,0 +1,37 @@
+package bargo
+
+import "testing"
+
+func TestFormatPercentForWidth(t *testing.T) {
+	tests := []struct {
+		name        string
+		value       float64
+		decimals    int
+		width       int
+		expect      string
+		expectWidth int
+	}{
+		{name: "fits default precision", value: 88.2, decimals: 1, width: 8, expect: "88.2%"},
+		{name: "drops to integer", value: 93.456, decimals: 2, width: 4, expect: "93%"},
+		{name: "truncates when needed", value: 100, decimals: 2, width: 3, expect: "100"},
+		{name: "empty when width zero", value: 10, decimals: 1, width: 0, expect: ""},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := formatPercentForWidth(tt.value, tt.decimals, tt.width)
+			if got != tt.expect {
+				t.Fatalf("expected %q, got %q", tt.expect, got)
+			}
+		})
+	}
+}
+
+func TestNormalizeRatio(t *testing.T) {
+	if got := normalizeRatio(50, 0, 100); got != 0.5 {
+		t.Fatalf("expected 0.5, got %v", got)
+	}
+	if got := normalizeRatio(50, 10, 10); got != 0 {
+		t.Fatalf("expected 0 for invalid bounds, got %v", got)
+	}
+}
