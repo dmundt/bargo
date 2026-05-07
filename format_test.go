@@ -1,6 +1,9 @@
 package bargo
 
-import "testing"
+import (
+	"strings"
+	"testing"
+)
 
 func TestFormatPercentForWidth(t *testing.T) {
 	tests := []struct {
@@ -32,7 +35,10 @@ func TestNormalizeRatio(t *testing.T) {
 		t.Fatalf("expected 0.5, got %v", got)
 	}
 	if got := normalizeRatio(50, 10, 10); got != 0 {
-		t.Fatalf("expected 0 for invalid bounds, got %v", got)
+		t.Fatalf("expected 0 for equal bounds, got %v", got)
+	}
+	if got := normalizeRatio(50, 100, 10); got != 0 {
+		t.Fatalf("expected 0 for inverted bounds, got %v", got)
 	}
 }
 
@@ -43,6 +49,17 @@ func TestRenderInnerHeadRune(t *testing.T) {
 
 	if got := renderInner(10, 50, 0.5, cfg); got != "====>     " {
 		t.Fatalf("expected head rune at frontier, got %q", got)
+	}
+}
+
+func TestRenderInnerNoHeadAtNearZeroRatio(t *testing.T) {
+	// ratio 0.01 rounds to fillCount 0 at width 10; no head should appear.
+	cfg := defaultConfig()
+	cfg.showPercent = false
+	cfg.headRune = '>'
+
+	if got := renderInner(10, 1, 0.01, cfg); strings.ContainsRune(got, '>') {
+		t.Fatalf("expected no head rune when fillCount rounds to zero, got %q", got)
 	}
 }
 
