@@ -5,9 +5,11 @@ type config struct {
 	max            float64
 	decimals       int
 	fillRune       rune
+	headRune       rune
 	emptyRune      rune
 	leftDelim      string
 	rightDelim     string
+	showPercent    bool
 	clamp          bool
 	carriageReturn bool
 }
@@ -21,9 +23,11 @@ func defaultConfig() config {
 		max:            100,
 		decimals:       1,
 		fillRune:       '=',
+		headRune:       '=',
 		emptyRune:      ' ',
 		leftDelim:      "[",
 		rightDelim:     "]",
+		showPercent:    true,
 		clamp:          true,
 		carriageReturn: false,
 	}
@@ -57,6 +61,14 @@ func WithFillRune(r rune) Option {
 	}
 }
 
+// WithHeadRune sets the rune used for the moving head of the bar.
+// Default is '='.
+func WithHeadRune(r rune) Option {
+	return func(c *config) {
+		c.headRune = r
+	}
+}
+
 // WithEmptyRune sets the rune used for the unfilled portion of the bar.
 // Default is ' ' (space).
 func WithEmptyRune(r rune) Option {
@@ -76,6 +88,14 @@ func WithLeftDelim(s string) Option {
 func WithRightDelim(s string) Option {
 	return func(c *config) {
 		c.rightDelim = s
+	}
+}
+
+// WithPercentVisible controls whether the centered percentage label is shown.
+// Default is true.
+func WithPercentVisible(enabled bool) Option {
+	return func(c *config) {
+		c.showPercent = enabled
 	}
 }
 

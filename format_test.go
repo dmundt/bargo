@@ -35,3 +35,23 @@ func TestNormalizeRatio(t *testing.T) {
 		t.Fatalf("expected 0 for invalid bounds, got %v", got)
 	}
 }
+
+func TestRenderInnerHeadRune(t *testing.T) {
+	cfg := defaultConfig()
+	cfg.showPercent = false
+	cfg.headRune = '>'
+
+	if got := renderInner(10, 50, 0.5, cfg); got != "====>     " {
+		t.Fatalf("expected head rune at frontier, got %q", got)
+	}
+}
+
+func TestRenderInnerNoHeadAtComplete(t *testing.T) {
+	cfg := defaultConfig()
+	cfg.showPercent = false
+	cfg.headRune = '>'
+
+	if got := renderInner(10, 100, 1, cfg); got != "==========" {
+		t.Fatalf("expected full fill without head rune, got %q", got)
+	}
+}
