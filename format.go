@@ -10,7 +10,6 @@ func renderInner(width int, value float64, ratio float64, cfg config) string {
 		return ""
 	}
 
-	percentText := formatPercentForWidth(value, cfg.decimals, width)
 	bar := make([]rune, width)
 	for i := range bar {
 		bar[i] = cfg.emptyRune
@@ -26,6 +25,23 @@ func renderInner(width int, value float64, ratio float64, cfg config) string {
 	for i := 0; i < fillCount; i++ {
 		bar[i] = cfg.fillRune
 	}
+
+	if ratio > 0 && ratio < 1 {
+		headPos := fillCount - 1
+		if headPos < 0 {
+			headPos = 0
+		}
+		if headPos >= width {
+			headPos = width - 1
+		}
+		bar[headPos] = cfg.headRune
+	}
+
+	if !cfg.showPercent {
+		return string(bar)
+	}
+
+	percentText := formatPercentForWidth(value, cfg.decimals, width)
 
 	label := []rune(percentText)
 	if len(label) > width {
