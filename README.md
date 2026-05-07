@@ -50,7 +50,7 @@ Defaults:
 - Delimiters are `[` and `]`
 - Fill and empty runes are `=` and space
 - Moving head rune defaults to `=`
-- Center percentage label is visible by default
+- Centered percentage label is visible by default
 - Out-of-range input is clamped by default
 
 ## Options

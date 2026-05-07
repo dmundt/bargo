@@ -26,14 +26,8 @@ func renderInner(width int, value float64, ratio float64, cfg config) string {
 		bar[i] = cfg.fillRune
 	}
 
-	if ratio > 0 && ratio < 1 {
+	if fillCount > 0 && ratio < 1 {
 		headPos := fillCount - 1
-		if headPos < 0 {
-			headPos = 0
-		}
-		if headPos >= width {
-			headPos = width - 1
-		}
 		bar[headPos] = cfg.headRune
 	}
 
